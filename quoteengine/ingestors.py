@@ -62,11 +62,15 @@ class PDFIngestor(IngestorInterface):
     def parse(cls, path):
         """Read PDF files, extract lines and return a list of quotes."""
         text_file = "./pdf_to_text.txt"
-        cmd = f"pdftotext -layout -nopgbrk {path} {text_file}"
-        subprocess.run(cmd, shell=True, stderr=subprocess.STDOUT, check=True)
-        quotes = TextIngestor.parse(text_file)
-        os.remove(text_file)
-        return quotes
+        try:
+            cmd = f"pdftotext -layout -nopgbrk {path} {text_file}"
+            subprocess.run(cmd, shell=True, stderr=subprocess.STDOUT, check=True)
+            quotes = TextIngestor.parse(text_file)
+            os.remove(text_file)
+            return quotes
+        except:
+            print("An error has occurred")
+            return []
 
 
 class TextIngestor(IngestorInterface):
